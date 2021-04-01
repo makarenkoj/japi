@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[show update destroy]
+  before_action :set_current_user_post, only: %i[edit update destroy]
 
   def index
     @posts = Post.all
@@ -10,7 +11,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
+    @post = Post.create(post_params.merge(user: current_user))
 
     if @post.save
       render :show, status: :created, location: @post
@@ -36,6 +37,9 @@ class PostsController < ApplicationController
   end
 
   private
+  def set_current_user_post
+    @post = current_user.posts.find(params[:id])
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_post
