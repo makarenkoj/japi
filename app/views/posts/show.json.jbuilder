@@ -1,5 +1,3 @@
-# json.partial! "posts/post", post: @post
-
 json.ignore_nil!
 
 json.post do
